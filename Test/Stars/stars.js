@@ -16,7 +16,7 @@ function scale (number, inMin, inMax, outMin, outMax) {
     return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
 }
 
-let speed = 5;
+let speed = 4;
 
 class Star{
     constructor(){
@@ -67,29 +67,32 @@ class Star{
 }
 
 window.addEventListener('wheel', function(event){
-    speed -= event.deltaY / 500;
-    speed = Math.min(Math.max(speed, 0.1), 60);
+    speed -= event.deltaY / 400;
+    speed = Math.min(Math.max(speed, 0.1), 50);
 })
 
 let stars = [];
 starAmount = 800;
 
 amountSlider.addEventListener('input', function(event){
-    
+    starAmount = event.target.value;
+    init(starAmount);
 })
 
 window.addEventListener('resize', function(){
     canvas.width = innerWidth;
     canvas.height = innerHeight;
+    init(starAmount);
 })
 
-function init() {
-    for (i = 0; i < starAmount; i++) {
+function init(amount) {
+    stars = []
+    for (i = 0; i < amount; i++) {
         stars.push(new Star());
     }
 }
 
-init();
+init(starAmount);
 
 function animate() {
     requestAnimationFrame(animate);

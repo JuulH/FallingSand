@@ -52,11 +52,11 @@ class Star{
 
         this.radius = scale(this.z, 0, innerWidth, 4, 0);
 
-        ctx.beginPath();
-        ctx.moveTo(px, py);
-        ctx.lineTo(sx, sy);
-        ctx.strokeStyle = 'red';
-        ctx.stroke();
+        // ctx.beginPath();
+        // ctx.moveTo(px, py);
+        // ctx.lineTo(sx, sy);
+        // ctx.strokeStyle = 'red';
+        // ctx.stroke();
 
         ctx.beginPath();
         ctx.arc(sx + (innerWidth / 2), sy + (innerHeight / 2), this.radius, 0, Math.PI * 2, false);

@@ -1,5 +1,17 @@
 #canvas{
     width: 512px;
     height: 512px;
-    border: 1px solid black;
+    background-color: black;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Rubik', sans-serif;
+}
+
+body {
+    color: white;
+    display: flex;
+    justify-content: center;
+    background-color: #171d29; /*#10141c*/
 }

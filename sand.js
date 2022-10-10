@@ -52,18 +52,39 @@ const hexToRgb = hex =>
         .substring(1).match(/.{2}/g)
         .map(x => parseInt(x, 16))
 
+const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
+    const hex = x.toString(16)
+    return hex.length === 1 ? '0' + hex : hex
+}).join('')
+
 // https://en.wikipedia.org/wiki/Linear_interpolation
 const lerp = (a, b, t) => {
     return (1 - t) * a + t * b;
+}
+
+function randomColor() {
+    let rB = Math.floor(Math.random() * 255);
+    let gB = Math.floor(Math.random() * 255);
+    let bB = Math.floor(Math.random() * 255);
+
+    bColor = [rB, gB, bB];
+    beginColor.value = rgbToHex(...bColor);
+
+    let rE = Math.floor(Math.random() * 255);
+    let gE = Math.floor(Math.random() * 255);
+    let bE = Math.floor(Math.random() * 255);
+
+    eColor = [rE, gE, bE];
+    endColor.value = rgbToHex(...eColor);
 }
 
 function gradient(offset, scale) {
     for (y = 0; y < canvas.height; y++) {
         for (x = 0; x < canvas.width; x++) {
             let factor = (x + y) / scale + offset;
-            let r = lerp(bColor[0], eColor[0], factor);
-            let g = lerp(bColor[1], eColor[1], factor);
-            let b = lerp(bColor[2], eColor[2], factor);
+            let r = lerp(bColor[0], eColor[0], factor / 255);
+            let g = lerp(bColor[1], eColor[1], factor / 255);
+            let b = lerp(bColor[2], eColor[2], factor / 255);
             draw(x, y, ...[r, g, b]);
         }
     }

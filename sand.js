@@ -9,6 +9,8 @@ canvas.height = 512;
 
 const ctx = canvas.getContext('2d');
 
+ctx.imageSmoothingEnabled = false;
+
 const buffer = ctx.getImageData(0,0, canvas.width, canvas.height);
 
 function draw(x, y, r, g, b) {

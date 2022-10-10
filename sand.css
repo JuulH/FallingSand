@@ -24,6 +24,6 @@ label {
 }
 
 input,
-label {
+label, button {
     float: left;
 }

@@ -19,12 +19,13 @@
             <label for="offset">Offset</label>
             <input type="range" id="offsetSlider" name="offset" min="-256" max="256"><br>
             <label for="scale">Scale</label>
-            <input type="range" id="scaleSlider" name="scale" min="0" max="8" step=".1"><br>
+            <input type="range" id="scaleSlider" name="scale" min="0.0001" max="8" step=".1"><br>
             <label for="bColor">Begin color</label>
             <input type="color" id="beginColor" name="bColor" value="#000000"><br>
             <label for="eColor">End color</label>
-            <input type="color" id="endColor" name="eColor" value="#ffffff"><br>
-            <button id="randomBtn" onClick="randomColor()">Randomize</button>
+            <input type="color" id="endColor" name="eColor" value="#ffffff"><br><br>
+            <label for="randomButton">Random Color</label>
+            <button id="randomBtn" onClick="randomColor()" name="randomButton">Randomize</button>
         </div>
     </div>
 </body>

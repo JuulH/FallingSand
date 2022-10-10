@@ -9,7 +9,7 @@ canvas.height = 512;
 
 const ctx = canvas.getContext('2d');
 
-buffer = ctx.getImageData(0,0, canvas.width, canvas.height);
+const buffer = ctx.getImageData(0,0, canvas.width, canvas.height);
 
 function draw(x, y, r, g, b) {
     let i = x * 4 + y * 4 * canvas.width;  // Coordinate
@@ -62,6 +62,7 @@ const lerp = (a, b, t) => {
     return (1 - t) * a + t * b;
 }
 
+// Set random begin & end colors
 function randomColor() {
     let rB = Math.floor(Math.random() * 255);
     let gB = Math.floor(Math.random() * 255);
@@ -81,7 +82,7 @@ function randomColor() {
 function gradient(offset, scale) {
     for (y = 0; y < canvas.height; y++) {
         for (x = 0; x < canvas.width; x++) {
-            let factor = (x + y) / scale + offset;
+            let factor = (x + y) / (scale * canvas.width / 512) + offset;
             let r = lerp(bColor[0], eColor[0], factor / 255);
             let g = lerp(bColor[1], eColor[1], factor / 255);
             let b = lerp(bColor[2], eColor[2], factor / 255);

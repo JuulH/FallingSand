@@ -5,8 +5,8 @@
 //#region Canvas initialization
 const canvas = document.getElementById('canvas');
 
-canvas.width = 32;
-canvas.height = 32;
+canvas.width = 16;
+canvas.height = 16;
 
 const ctx = canvas.getContext('2d');
 
@@ -120,8 +120,8 @@ const ratioY = cssHeight / canvas.height;
 
 // Get mouse position regardless of canvas size
 canvas.addEventListener('mousemove', (event) => {
-    mouse.x = Math.round(event.offsetX / ratioX);
-    mouse.y = Math.round(event.offsetY / ratioY);
+    mouse.x = Math.floor(event.offsetX / ratioX);
+    mouse.y = Math.floor(event.offsetY / ratioY);
 });
 
 // Get CSS width of canvas

@@ -2,6 +2,7 @@
  * @type HTMLCanvasElement
  */
 
+//#region Canvas initialization
 const canvas = document.getElementById('canvas');
 
 canvas.width = 512;
@@ -12,7 +13,9 @@ const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 
 const buffer = ctx.getImageData(0,0, canvas.width, canvas.height);
+//#endregion
 
+// Draw pixel to buffer
 function draw(x, y, r, g, b) {
     let i = x * 4 + y * 4 * canvas.width;  // Coordinate
     buffer.data[i] = r;                    // Red
@@ -31,6 +34,7 @@ const scaleSlider = document.getElementById('scaleSlider');
 const beginColor = document.getElementById('beginColor');
 const endColor = document.getElementById('endColor');
 
+// Get input values
 offsetSlider.addEventListener('input', (event) => {
     offset = parseInt(event.target.value);
 });
@@ -48,19 +52,22 @@ endColor.addEventListener('input', (event) => {
 });
 
 // https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-const hexToRgb = hex =>
-    hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
-        , (m, r, g, b) => '#' + r + r + g + g + b + b)
+function hexToRgb(hex) {
+    return hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+        (m, r, g, b) => '#' + r + r + g + g + b + b)
         .substring(1).match(/.{2}/g)
-        .map(x => parseInt(x, 16))
+        .map(x => parseInt(x, 16));
+}
 
-const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
-    const hex = x.toString(16)
-    return hex.length === 1 ? '0' + hex : hex
-}).join('')
+function rgbToHex(r, g, b) {
+    return '#' + [r, g, b].map(x => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    }).join('');
+}
 
 // https://en.wikipedia.org/wiki/Linear_interpolation
-const lerp = (a, b, t) => {
+function lerp(a, b, t) {
     return (1 - t) * a + t * b;
 }
 
@@ -81,10 +88,12 @@ function randomColor() {
     endColor.value = rgbToHex(...eColor);
 }
 
+// Calculate interpolated color between begin and end color for each pixel
 function gradient(offset, scale) {
     for (y = 0; y < canvas.height; y++) {
         for (x = 0; x < canvas.width; x++) {
             let factor = (x + y) / (scale * canvas.width / 512) + offset;
+            // TODO: Offset factor to compensate for scaling
             let r = lerp(bColor[0], eColor[0], factor / 255);
             let g = lerp(bColor[1], eColor[1], factor / 255);
             let b = lerp(bColor[2], eColor[2], factor / 255);
@@ -93,6 +102,7 @@ function gradient(offset, scale) {
     }
 }
 
+// Update loop
 function animate() {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);   // Clear frame

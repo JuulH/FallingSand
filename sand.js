@@ -5,11 +5,14 @@
 //#region Canvas initialization
 const canvas = document.getElementById('canvas');
 
-canvas.width = 512;
-canvas.height = 512;
+canvas.width = 32;
+canvas.height = 32;
 
 const ctx = canvas.getContext('2d');
 
+ctx.mozImageSmoothingEnabled = false;
+ctx.webkitImageSmoothingEnabled = false;
+ctx.msImageSmoothingEnabled = false;
 ctx.imageSmoothingEnabled = false;
 
 const buffer = ctx.getImageData(0,0, canvas.width, canvas.height);
@@ -102,12 +105,43 @@ function gradient(offset, scale) {
     }
 }
 
+let mouse = {
+    x: undefined,
+    y: undefined
+};
+
+// Get CSS width of canvas
+const cssWidth = parseInt(getComputedStyle(canvas).width);
+const cssHeight = parseInt(getComputedStyle(canvas).height);
+
+// Get ratio between canvas and CSS width
+const ratioX = cssWidth / canvas.width;
+const ratioY = cssHeight / canvas.height;
+
+// Get mouse position regardless of canvas size
+canvas.addEventListener('mousemove', (event) => {
+    mouse.x = Math.round(event.offsetX / ratioX);
+    mouse.y = Math.round(event.offsetY / ratioY);
+});
+
+// Get CSS width of canvas
+function getCanvasWidth() {
+    return 
+}
+
 // Update loop
 function animate() {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);   // Clear frame
 
     gradient(offset, scale);
+
+    // Draw pixel at mouse position
+    if (mouse.x !== undefined && mouse.y !== undefined) {
+        draw(mouse.x, mouse.y, 255, 255, 255);
+    }
+    //console.log(mouse);
+
     ctx.putImageData(buffer, 0, 0);                     // Draw buffer to screen
 }
 

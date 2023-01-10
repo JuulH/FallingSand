@@ -17,14 +17,9 @@ body {
     font-family: 'Rubik', sans-serif;
 }
 
-label {
-    width: 180px;
-    clear: left;
-    text-align: right;
-    padding-right: 10px;
-}
-
-input,
-label, button {
-    float: left;
+#controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
 }

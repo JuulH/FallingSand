@@ -6,6 +6,8 @@
     <title>Falling Sand</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='sand.css'>
+    <script src='elements.js' defer></script>
+    <script src='simulation.js' defer></script>
     <script src='sand.js' defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,17 +18,11 @@
         <h1>Falling Sand</h1>
         <canvas id="canvas" width="512" height="512"></canvas>
         <div id="controls">
-            <label for="offset">Offset</label>
-            <input type="range" id="offsetSlider" name="offset" min="-256" max="256"><br>
-            <label for="scale">Scale</label>
-            <input type="range" id="scaleSlider" name="scale" min="0.0001" max="8" step=".1"><br>
-            <label for="bColor">Begin color</label>
-            <input type="color" id="beginColor" name="bColor" value="#000000"><br>
-            <label for="eColor">End color</label>
-            <input type="color" id="endColor" name="eColor" value="#ffffff"><br><br>
-            <label for="randomButton">Random Color</label>
-            <button id="randomBtn" onClick="randomColor()" name="randomButton">Randomize</button>
-        </div>
+            <button id="sand" onclick="SelectElement(Elements.Sand)">Sand</button>
+            <button id="water" onclick="SelectElement(Elements.Water)">Water</button>
+            <button id="wall" onclick="SelectElement(Elements.Wall)">Wall</button>
+        </div><br>
+        <p id="data"></p>
     </div>
 </body>
 </html>

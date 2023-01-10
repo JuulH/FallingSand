@@ -5,8 +5,8 @@
 //#region Canvas initialization
 const canvas = document.getElementById('canvas');
 
-canvas.width = 16;
-canvas.height = 16;
+canvas.width = 32;
+canvas.height = 32;
 
 const ctx = canvas.getContext('2d');
 
@@ -32,27 +32,29 @@ let scale = 4;
 let bColor = [0, 0, 0];
 let eColor = [255, 255, 255];
 
-const offsetSlider = document.getElementById('offsetSlider');
-const scaleSlider = document.getElementById('scaleSlider');
-const beginColor = document.getElementById('beginColor');
-const endColor = document.getElementById('endColor');
+// const offsetSlider = document.getElementById('offsetSlider');
+// const scaleSlider = document.getElementById('scaleSlider');
+// const beginColor = document.getElementById('beginColor');
+// const endColor = document.getElementById('endColor');
 
-// Get input values
-offsetSlider.addEventListener('input', (event) => {
-    offset = parseInt(event.target.value);
-});
+// // Get input values
+// offsetSlider.addEventListener('input', (event) => {
+//     offset = parseInt(event.target.value);
+// });
 
-scaleSlider.addEventListener('input', (event) => {
-    scale = parseFloat(event.target.value);
-});
+// scaleSlider.addEventListener('input', (event) => {
+//     scale = parseFloat(event.target.value);
+// });
 
-beginColor.addEventListener('input', (event) => {
-    bColor = hexToRgb(event.target.value);
-});
+// beginColor.addEventListener('input', (event) => {
+//     bColor = hexToRgb(event.target.value);
+// });
 
-endColor.addEventListener('input', (event) => {
-    eColor = hexToRgb(event.target.value);
-});
+// endColor.addEventListener('input', (event) => {
+//     eColor = hexToRgb(event.target.value);
+// });
+
+const debugData = document.getElementById('data');
 
 // https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 function hexToRgb(hex) {
@@ -74,37 +76,6 @@ function lerp(a, b, t) {
     return (1 - t) * a + t * b;
 }
 
-// Set random begin & end colors
-function randomColor() {
-    let rB = Math.floor(Math.random() * 255);
-    let gB = Math.floor(Math.random() * 255);
-    let bB = Math.floor(Math.random() * 255);
-
-    bColor = [rB, gB, bB];
-    beginColor.value = rgbToHex(...bColor);
-
-    let rE = Math.floor(Math.random() * 255);
-    let gE = Math.floor(Math.random() * 255);
-    let bE = Math.floor(Math.random() * 255);
-
-    eColor = [rE, gE, bE];
-    endColor.value = rgbToHex(...eColor);
-}
-
-// Calculate interpolated color between begin and end color for each pixel
-function gradient(offset, scale) {
-    for (y = 0; y < canvas.height; y++) {
-        for (x = 0; x < canvas.width; x++) {
-            let factor = (x + y) / (scale * canvas.width / 512) + offset;
-            // TODO: Offset factor to compensate for scaling
-            let r = lerp(bColor[0], eColor[0], factor / 255);
-            let g = lerp(bColor[1], eColor[1], factor / 255);
-            let b = lerp(bColor[2], eColor[2], factor / 255);
-            draw(x, y, ...[r, g, b]);
-        }
-    }
-}
-
 let mouse = {
     x: undefined,
     y: undefined
@@ -124,23 +95,54 @@ canvas.addEventListener('mousemove', (event) => {
     mouse.y = Math.floor(event.offsetY / ratioY);
 });
 
-// Get CSS width of canvas
-function getCanvasWidth() {
-    return 
+mouseDown = false;
+
+canvas.addEventListener('mousedown', (event) => {
+    mouseDown = true;
+});
+
+canvas.addEventListener('mouseup', (event) => {
+    mouseDown = false;
+});
+
+fps = 30;
+
+activeElement = Elements.Sand;
+
+function SelectElement(element) {
+    activeElement = element;
 }
 
 // Update loop
 function animate() {
-    requestAnimationFrame(animate);
+
+    // Limit framerate
+    setTimeout(() => {
+        requestAnimationFrame(animate);
+    }, 1000 / fps)
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);   // Clear frame
 
-    gradient(offset, scale);
+    buffer.data.fill(0);
+
+    //gradient(offset, scale);
 
     // Draw pixel at mouse position
     if (mouse.x !== undefined && mouse.y !== undefined) {
         draw(mouse.x, mouse.y, 255, 255, 255);
     }
     //console.log(mouse);
+
+    if(mouseDown){
+        AddElement(mouse.x, mouse.y, activeElement);
+    }
+
+    Simulate();
+    for(particle of particles) {
+        draw(particle.x, particle.y, ...particle.color)
+    }
+
+    debugData.innerText = `FPS: ${fps}\n Particles: ${particles.length}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}\n`;
 
     ctx.putImageData(buffer, 0, 0);                     // Draw buffer to screen
 }

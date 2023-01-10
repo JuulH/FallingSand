@@ -3,7 +3,8 @@ let particles = [];
 const Elements = {
     Sand: 0,
     Water: 1,
-    Stone: 2
+    Stone: 2,
+    Eraser: 3
 };
 
 function AddElement(x, y, element) {
@@ -17,6 +18,13 @@ function AddElement(x, y, element) {
         case Elements.Wall:
             particles.push(new Wall(x, y));
             break;
+        case Elements.Eraser:
+            for (const [id, particle] of particles.entries()) {
+                if (particle.x == x && particle.y == y) {
+                    particles.splice(id, 1);
+                    break;
+                }
+            }
     }
 }
 

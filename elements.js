@@ -9,7 +9,7 @@ class Particle {
 class Sand extends Particle {
     constructor(x, y) {
         super(x, y);
-        this.color [255, 255, 0];
+        this.color = [255, 255, 0];
         this.moveablePositions = [
             [0, 1],
             [1, 1],

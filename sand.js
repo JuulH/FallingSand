@@ -5,8 +5,8 @@
 //#region Canvas initialization
 const canvas = document.getElementById('canvas');
 
-canvas.width = 32;
-canvas.height = 32;
+canvas.width = 64;
+canvas.height = 64;
 
 const ctx = canvas.getContext('2d');
 
@@ -18,6 +18,8 @@ ctx.imageSmoothingEnabled = false;
 const buffer = ctx.getImageData(0,0, canvas.width, canvas.height);
 //#endregion
 
+fps = 120;
+
 // Draw pixel to buffer
 function draw(x, y, r, g, b) {
     let i = x * 4 + y * 4 * canvas.width;  // Coordinate
@@ -26,33 +28,6 @@ function draw(x, y, r, g, b) {
     buffer.data[i + 2] = b;                // Blue
     buffer.data[i + 3] = 255;              // Alpha
 }
-
-let offset = 0;
-let scale = 4;
-let bColor = [0, 0, 0];
-let eColor = [255, 255, 255];
-
-// const offsetSlider = document.getElementById('offsetSlider');
-// const scaleSlider = document.getElementById('scaleSlider');
-// const beginColor = document.getElementById('beginColor');
-// const endColor = document.getElementById('endColor');
-
-// // Get input values
-// offsetSlider.addEventListener('input', (event) => {
-//     offset = parseInt(event.target.value);
-// });
-
-// scaleSlider.addEventListener('input', (event) => {
-//     scale = parseFloat(event.target.value);
-// });
-
-// beginColor.addEventListener('input', (event) => {
-//     bColor = hexToRgb(event.target.value);
-// });
-
-// endColor.addEventListener('input', (event) => {
-//     eColor = hexToRgb(event.target.value);
-// });
 
 const debugData = document.getElementById('data');
 
@@ -78,7 +53,9 @@ function lerp(a, b, t) {
 
 let mouse = {
     x: undefined,
-    y: undefined
+    y: undefined,
+    px: undefined,
+    py: undefined
 };
 
 // Get CSS width of canvas
@@ -105,8 +82,6 @@ canvas.addEventListener('mouseup', (event) => {
     mouseDown = false;
 });
 
-fps = 30;
-
 activeElement = Elements.Sand;
 
 function SelectElement(element) {
@@ -121,30 +96,32 @@ function animate() {
         requestAnimationFrame(animate);
     }, 1000 / fps)
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);   // Clear frame
-
+    // Clear frame
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     buffer.data.fill(0);
-
-    //gradient(offset, scale);
 
     // Draw pixel at mouse position
     if (mouse.x !== undefined && mouse.y !== undefined) {
         draw(mouse.x, mouse.y, 255, 255, 255);
     }
-    //console.log(mouse);
 
+    // Add selected element at mouse position
     if(mouseDown){
         AddElement(mouse.x, mouse.y, activeElement);
     }
 
+    // Update simulation
     Simulate();
+
+    // Draw particles to buffer
     for(particle of particles) {
         draw(particle.x, particle.y, ...particle.color)
     }
 
+    // Add debug data
     debugData.innerText = `FPS: ${fps}\n Particles: ${particles.length}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}\n`;
 
-    ctx.putImageData(buffer, 0, 0);                     // Draw buffer to screen
+    ctx.putImageData(buffer, 0, 0); // Draw buffer to screen
 }
 
 animate();

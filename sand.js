@@ -31,6 +31,8 @@ function draw(x, y, r, g, b) {
 
 const debugData = document.getElementById('data');
 
+const elementButtons = document.getElementById('elements').children;
+
 // https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 function hexToRgb(hex) {
     return hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i,
@@ -86,6 +88,12 @@ activeElement = Elements.Sand;
 
 function SelectElement(element) {
     activeElement = element;
+
+    for (btn of elementButtons) {
+        btn.classList.remove('selected');
+    }
+
+    elementButtons[activeElement].classList.add('selected');
 }
 
 // Update loop
@@ -107,6 +115,7 @@ function animate() {
 
     // Add selected element at mouse position
     if(mouseDown){
+        //let slope = (mouse.x - mouse.px) / (mouse.y - mouse.py); // TODO: Slope
         AddElement(mouse.x, mouse.y, activeElement);
     }
 
@@ -119,7 +128,7 @@ function animate() {
     }
 
     // Add debug data
-    debugData.innerText = `FPS: ${fps}\n Particles: ${particles.length}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}\n`;
+    debugData.innerText = `FPS: ${fps}\n Particles: ${particles.length}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}\n Active Element: ${activeElement}, - ${Object.keys(Elements)[activeElement]}`;
 
     ctx.putImageData(buffer, 0, 0); // Draw buffer to screen
 }

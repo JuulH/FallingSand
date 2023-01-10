@@ -17,9 +17,13 @@ body {
     font-family: 'Rubik', sans-serif;
 }
 
-#controls {
+#elements {
     display: flex;
     flex-direction: row;
     justify-content: center;
     gap: 1rem;
+}
+
+.selected {
+    border: 2px dotted black;
 }

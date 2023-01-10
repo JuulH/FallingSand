@@ -3,7 +3,7 @@ let particles = [];
 const Elements = {
     Sand: 0,
     Water: 1,
-    Stone: 2,
+    Wall: 2,
     Eraser: 3
 };
 

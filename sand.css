@@ -3,6 +3,7 @@
     height: 512px;
     background-color: black;
     image-rendering: pixelated;
+    cursor: none;
 }
 
 h1 {
@@ -25,5 +26,19 @@ body {
 }
 
 .selected {
-    border: 2px dotted black;
+    border: 2px solid black;
+}
+
+#elements > button {
+    padding: .5rem .75rem;
+    user-select: none;
+}
+
+#data > summary {
+    cursor: pointer;
+    user-select: none;
+}
+
+#data > #data-text {
+    user-select: text;
 }

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Falling Sand</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='sand.css'>
+    <script src="https://kit.fontawesome.com/20bb223478.js" crossorigin="anonymous"></script>
     <script src='elements.js' defer></script>
     <script src='simulation.js' defer></script>
     <script src='sand.js' defer></script>
@@ -13,18 +15,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div>
         <h1>Falling Sand</h1>
         <canvas id="canvas" width="512" height="512"></canvas>
         <div id="elements">
-            <!-- TODO: Generate at runtime -->
-            <button id="sand" onclick="SelectElement(Elements.Sand)">Sand</button>
-            <button id="water" onclick="SelectElement(Elements.Water)">Water</button>
-            <button id="wall" onclick="SelectElement(Elements.Wall)">Wall</button>
-            <button id="eraser" onclick="SelectElement(Elements.Eraser)">Eraser</button>
+            <button onclick="ClearCanvas()"><i class="fas fa-xmark"></i></button>
+            <button onclick="TogglePause()" id="pause-button"><i class="fas fa-pause"></i></button>
         </div><br>
-        <p id="data"></p>
+        <details id="data">
+            <summary>Simulation Data</summary>
+            <p id="data-text"></p>
+        </details>
     </div>
 </body>
+
 </html>

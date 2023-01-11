@@ -8,6 +8,10 @@ const Elements = {
 };
 
 function AddElement(x, y, element) {
+    if(!CanMoveTo(x, y) && element != Elements.Eraser) {
+        return;
+    }
+
     switch (element) {
         case Elements.Sand:
             particles.push(new Sand(x, y));
@@ -19,9 +23,9 @@ function AddElement(x, y, element) {
             particles.push(new Wall(x, y));
             break;
         case Elements.Eraser:
-            for (const [id, particle] of particles.entries()) {
+            for (const [index, particle] of particles.entries()) {
                 if (particle.x == x && particle.y == y) {
-                    particles.splice(id, 1);
+                    particles.splice(index, 1);
                     break;
                 }
             }
@@ -49,10 +53,10 @@ function Simulate() {
             if (CanMoveTo(particle.x + moveablePosition[0], particle.y + moveablePosition[1])) {
                 particle.x += moveablePosition[0];
                 particle.y += moveablePosition[1];
-                console.log(id + " Moved particle to " + moveablePosition[0] + ", " + moveablePosition[1])
+                // console.log(id + " Moved particle to " + moveablePosition[0] + ", " + moveablePosition[1])
                 break;
             } else {
-                console.log(id + " Couldn't move particle to " + moveablePosition[0] + ", " + moveablePosition[1]);
+                // console.log(id + " Couldn't move particle to " + moveablePosition[0] + ", " + moveablePosition[1]);
             }
         }
     }

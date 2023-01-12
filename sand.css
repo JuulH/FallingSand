@@ -36,6 +36,7 @@ h1 {
     user-select: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
+    touch-action: none;
 }
 
 /* Fullscreen layout */

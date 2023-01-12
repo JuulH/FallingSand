@@ -188,19 +188,20 @@ function ClearCanvas() {
 
 SelectElement(0);
 
-let start = Date.now();
 let timeSinceUpdate = 0;
-let updates = 0;
-let totalTime = 0;
+let frameCount = 0;
+let totalFps = 0;
+let currentFps = 0;
 let averageFps = 0;
 
 // Update average fps every second
+// TODO: Fix this >:(
 setInterval(() => {
     // Calculate average fps using totaltime and updates
-    averageFps = Math.round(updates / (totalTime / 1000));
-    updates = 0;
-    totalTime = 0;
-}, 1000);
+    averageFps = Math.round(totalFps / frameCount);
+    totalFps = 0;
+    frameCount = 0;
+}, 500);
 
 // Update loop
 function animate() {
@@ -210,9 +211,10 @@ function animate() {
         requestAnimationFrame(animate);
     }, 1000 / fps);
 
-    updates++;
-    timeSinceUpdate = Date.now() - start;
-    totalTime += timeSinceUpdate;
+    timeSinceUpdate = performance.now() - start;
+    currentFps = 1 / (timeSinceUpdate / 1000);
+    totalFps += currentFps;
+    frameCount++;
 
     // Clear frame
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -243,7 +245,8 @@ function animate() {
 
     ctx.putImageData(buffer, 0, 0); // Draw buffer to canvas
 
-    start = Date.now();
+    start = performance.now();
 }
 
+let start = performance.now();
 animate();

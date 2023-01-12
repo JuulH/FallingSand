@@ -89,6 +89,7 @@ h1 {
 
 #brush-slider {
     width: 100%;
+
 }
 
 #brush-label {
@@ -109,6 +110,7 @@ h1 {
     transition: background-color .1s;
     color: black;
     text-align: center;
+    cursor: pointer;
 }
 
 #elements > button:hover,
@@ -148,7 +150,7 @@ h1 {
 
 /* Github link */
 footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     margin: 0 0 1rem 1rem;
@@ -207,7 +209,7 @@ footer > a:visited {
     }
 
     #controls {
-        width: 29vw;
+        width: 32vw;
         gap: .3rem;
         margin: 0 .3rem 0 0rem;
     }

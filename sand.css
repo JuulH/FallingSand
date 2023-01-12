@@ -61,6 +61,7 @@ h1 {
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
+    align-content: flex-start;
     flex-wrap: wrap;
     gap: .75rem;
 }
@@ -71,6 +72,7 @@ h1 {
     flex-direction: row;
     justify-content: flex-end;
     align-items: flex-start;
+    align-content: flex-start;
     flex-wrap: wrap;
     gap: .75rem;
 }
@@ -104,10 +106,21 @@ h1 {
     background-color: rgb(150, 150, 150);
 }
 
-/* Debug Data */
-#data {
-    margin-top: .5rem;
+#brush-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
 }
+
+#brush-container > label {
+    font-size: 1rem;
+    margin-top: .25rem;
+}
+
+/* Debug Data */
+/* #data {
+    margin-top: .5rem;
+} */
 
 #data > summary {
     cursor: pointer;

@@ -35,6 +35,8 @@ const debugData = document.getElementById('data-text');
 const elementButtons = document.getElementById('elements');
 const pauseButton = document.getElementById('pause-button');
 const simContainer = document.getElementById('sim-container');
+const brushSlider = document.getElementById('brush-slider');
+const brushLabel = document.getElementById('brush-size');
 
 // https://en.wikipedia.org/wiki/Linear_interpolation
 function lerp(a, b, t) {
@@ -140,6 +142,13 @@ function SelectElement(element) {
     elementButtons.children[activeElement].classList.add('selected');
 }
 
+let maxBrushSize = 16;
+
+brushSlider.oninput = function() {
+    brushSize = Math.round(this.value);
+    brushLabel.innerText = brushSize;
+}
+
 // Event handler for keyboard input to select elements using numbers
 document.addEventListener('keydown', (event) => {
     if (event.key >= 0 && event.key <= 9) {
@@ -160,8 +169,22 @@ document.addEventListener('keydown', (event) => {
     if (event.key == 'c') {
         ClearCanvas();
     }
+
+    // Brackets to change brush size
+    if (event.key == '[' && brushSize > 0) {
+        brushSize--;
+        brushSlider.value = brushSize;
+        brushLabel.innerText = brushSize;
+    }
+
+    if (event.key == ']' && brushSize < maxBrushSize) {
+        brushSize++;
+        brushSlider.value = brushSize;
+        brushLabel.innerText = brushSize;
+    }
 });
 
+//#region Simulation Controls
 let paused = false;
 
 function TogglePause() {
@@ -298,6 +321,22 @@ function LoadParticles() {
         }
     });
 }
+//#endregion
+
+// Brush sizes
+function Brush(cx, cy, size, cElement) {
+    for (y = cy - size; y < cy + size + 1; y++) {
+        for (x = cx - size; x < cx + size + 1; x++) {
+
+            // Brush rounding
+            let distance = Math.sqrt(Math.pow(x - cx, 2) + Math.pow(y - cy, 2));
+            if (distance <= size) {
+                AddElement(x, y, cElement);
+            }
+
+        }
+    }
+}
 
 SelectElement(0);
 
@@ -308,13 +347,15 @@ let currentFps = 0;
 let averageFps = 0;
 
 // Update average fps every second
-// TODO: Fix this >:(
+// TODO: Fix this :(
 setInterval(() => {
     // Calculate average fps using totaltime and updates
     averageFps = Math.round(totalFps / frameCount);
     totalFps = 0;
     frameCount = 0;
 }, 500);
+
+let brushSize = 0;
 
 // Update loop
 function animate() {
@@ -333,14 +374,14 @@ function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     buffer.data.fill(0);
 
-    // Add selected element at mouse position
-    if ((mouseDown || touchDown) && (mouse.x && mouse.y)) {
-        AddElement(mouse.x, mouse.y, activeElement);
-    }
-
     // Update simulation
     if (!paused) {
         Simulate();
+    }
+
+    // Add selected element at mouse position
+    if ((mouseDown || touchDown) && (mouse.x && mouse.y)) {
+        Brush(mouse.x, mouse.y, brushSize, activeElement);
     }
     
     // Draw particles to buffer
@@ -354,7 +395,7 @@ function animate() {
     }
 
     // Display debug data
-    debugData.innerText = `FPS: ${Math.round(averageFps)}/${fps}\n Particles: ${particles.length}\n Active Element: ${activeElement}, ${Object.keys(Elements)[activeElement]}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Previous Mouse Position: ${mouse.px}, ${mouse.py}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}`;
+    debugData.innerText = `FPS: ${Math.round(averageFps)}/${fps}\n Particles: ${particles.length}\n Active Element: ${activeElement}, ${Object.keys(Elements)[activeElement]}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Previous Mouse Position: ${mouse.px}, ${mouse.py}\n Brush Size: ${brushSize}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}`;
 
     ctx.putImageData(buffer, 0, 0); // Draw buffer to canvas
 

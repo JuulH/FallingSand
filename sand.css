@@ -67,7 +67,7 @@ h1 {
 }
 
 #controls {
-    width: 150px;
+    width: 7.5rem;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -79,6 +79,20 @@ h1 {
 
 #controls > button {
     box-sizing: border-box;
+    width: 2rem;
+    aspect-ratio: 1/1;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#brush-slider {
+    width: 100%;
+}
+
+#brush-label {
+    align-self: flex-start;
 }
 
 .selected {
@@ -94,6 +108,7 @@ h1 {
     border: none;
     transition: background-color .1s;
     color: black;
+    text-align: center;
 }
 
 #elements > button:hover,
@@ -174,6 +189,10 @@ footer > a:visited {
     #sim-controls {
         width: 100vw;
         justify-content: space-around;
+    }
+
+    #fullscreen-button {
+        display: none;
     }
 
     #elements {

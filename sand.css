@@ -96,12 +96,12 @@ h1 {
 
 #elements > button:hover,
 #controls > button:hover {
-    background-color: rgb(184, 184, 184);
+    background-color: rgb(190, 190, 190);
 }
 
-#elements > button:focus,
-#controls > button:focus {
-    background-color: rgb(151, 151, 151);
+#elements > button:active,
+#controls > button:active {
+    background-color: rgb(150, 150, 150);
 }
 
 /* Debug Data */

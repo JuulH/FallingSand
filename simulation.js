@@ -64,12 +64,17 @@ function Simulate() {
     for(const [id, particle] of particles.entries()) {
         for (moveablePosition of particle.moveablePositions) {
             if (CanMoveTo(particle.x + moveablePosition[0], particle.y + moveablePosition[1])) {
+                
+                if(Math.abs(moveablePosition[0]) > 0 && Math.abs(moveablePosition[1]) > 0) {
+                    if(!CanMoveTo(particle.x + moveablePosition[0], particle.y) && !CanMoveTo(particle.x, particle.y + moveablePosition[1])) {
+                        continue;
+                    }
+                }
+
                 particle.x += moveablePosition[0];
                 particle.y += moveablePosition[1];
                 // console.log(id + " Moved particle to " + moveablePosition[0] + ", " + moveablePosition[1])
                 break;
-            } else {
-                // console.log(id + " Couldn't move particle to " + moveablePosition[0] + ", " + moveablePosition[1]);
             }
         }
     }

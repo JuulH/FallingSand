@@ -27,10 +27,10 @@ class Water extends Particle {
         this.color = [0, 50, 255];
         this.moveablePositions = [
             [0, 1],
+            // [1, 1],
+            // [-1, 1],
             [1, 0],
             [-1, 0],
-            // [1, 1],
-            // [-1, 1]
         ];
     }
 }

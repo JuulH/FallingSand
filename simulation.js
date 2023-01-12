@@ -59,12 +59,15 @@ function CanMoveTo(x, y) {
     return true;
 }
 
+let sandSink = true;
+
 // Advance simulation by one step
 function Simulate() {
     for(const [id, particle] of particles.entries()) {
         for (moveablePosition of particle.moveablePositions) {
             if (CanMoveTo(particle.x + moveablePosition[0], particle.y + moveablePosition[1])) {
-                
+
+                //Check if particle can move diagonally
                 if(Math.abs(moveablePosition[0]) > 0 && Math.abs(moveablePosition[1]) > 0) {
                     if(!CanMoveTo(particle.x + moveablePosition[0], particle.y) && !CanMoveTo(particle.x, particle.y + moveablePosition[1])) {
                         continue;
@@ -73,7 +76,30 @@ function Simulate() {
 
                 particle.x += moveablePosition[0];
                 particle.y += moveablePosition[1];
-                // console.log(id + " Moved particle to " + moveablePosition[0] + ", " + moveablePosition[1])
+                break;
+            } else if (sandSink && particle.id == Elements.Sand || particle.id == Elements.AntiSand) {
+                let w_particle = particles.find(w_particle => w_particle.x == particle.x + moveablePosition[0] && w_particle.y == particle.y + moveablePosition[1] && w_particle.id == Elements.Water);
+                if(!w_particle) {
+                    continue;
+                }
+
+                console.log('Sand and water found');
+                w_particle.x = particle.x;
+                w_particle.y = particle.y;
+
+                particle.x += moveablePosition[0];
+                particle.y += moveablePosition[1];
+
+                for(i = 0; i < 4; i++) {
+                    for (w_moveablePosition of w_particle.moveablePositions) {
+                        if (CanMoveTo(w_particle.x + w_moveablePosition[0], w_particle.y + w_moveablePosition[1])) {
+                            w_particle.x += w_moveablePosition[0];
+                            w_particle.y += w_moveablePosition[1];
+                            break;
+                        }
+                    }
+                }
+
                 break;
             }
         }

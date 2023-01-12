@@ -194,7 +194,7 @@ footer > a:visited {
     }
 
     #fullscreen-button {
-        display: none;
+        display: none !important;
     }
 
     #elements {
@@ -222,6 +222,7 @@ footer > a:visited {
 
     footer > a {
         font-size: 3rem;
+        opacity: 0.25;
     }
 
     .unscrollable {

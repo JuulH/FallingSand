@@ -261,6 +261,9 @@ function CanvasToImage() {
 
 // Export particles to JSON file
 function ExportParticles() {
+    let fileName = prompt('Name your creation:', 'FallingSand');
+    if(!fileName) return;
+
     let exportData = [];
 
     // Loop through canvas and add particle ID to array
@@ -279,7 +282,7 @@ function ExportParticles() {
     let blob = new Blob([data], { type: 'application/json' });
     let url = URL.createObjectURL(blob);
     let link = document.createElement('a');
-    link.download = 'FallingSand.json';
+    link.download = `${fileName}.json`;
     link.href = url;
     link.click();
 }

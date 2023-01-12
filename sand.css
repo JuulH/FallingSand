@@ -1,37 +1,87 @@
-#canvas{
-    width: 512px;
-    height: 512px;
-    background-color: black;
-    image-rendering: pixelated;
-    cursor: none;
-}
-
-h1 {
-    text-align: center;
+html {
+    height: 100vh;
 }
 
 body {
     color: white;
     display: flex;
     justify-content: center;
-    background-color: #171d29; /*#10141c*/
+    background-color: #171d29;
+    /*#10141c*/
     font-family: 'Rubik', sans-serif;
 }
 
+h1, #subtitle {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: .5rem;
+}
+
+#subtitle {
+    opacity: 0.5;
+    font-size: .95rem;
+    margin: .5rem 0 .75rem 0;
+}
+
+
+/* Simulation */
+#canvas{
+    width: 512px;
+    height: 512px;
+    background-color: black;
+    image-rendering: pixelated;
+    cursor: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+}
+
+/* Fullscreen layout */
+#sim-container:fullscreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #171d29;
+
+}
+
+/* Element selection */
 #elements {
     display: flex;
     flex-direction: row;
     justify-content: center;
     gap: 1rem;
+    margin-top: .5rem;
 }
 
 .selected {
-    border: 2px solid black;
+    outline: 2px solid black !important;
+    background-color: rgb(250, 104, 7) !important;
 }
 
 #elements > button {
     padding: .5rem .75rem;
     user-select: none;
+    font-family: 'Rubik', sans-serif;
+    border: none;
+    transition: background-color .1s;
+    color: black;
+}
+
+#elements > button:hover {
+    background-color: rgb(184, 184, 184);
+}
+
+#elements > button:focus {
+    background-color: rgb(151, 151, 151);
+}
+
+/* Debug Data */
+#data {
+    margin-top: .5rem;
 }
 
 #data > summary {
@@ -41,4 +91,75 @@ body {
 
 #data > #data-text {
     user-select: text;
+}
+
+/* Github link */
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 0 0 1rem 1rem;
+}
+
+footer > a {
+    font-size: 3rem;
+    opacity: 0.4;
+    transition: opacity .1s ease;
+    color: white;
+}
+
+footer > a:hover {
+    opacity: .75;
+}
+
+footer > a:focus {
+    color: white;
+}
+
+/* Mobile support */
+@media only screen and (max-width: 600px) {
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h1, #subtitle {
+        text-align: center !important;
+        width: 100vw;
+    }
+
+    canvas {
+        width: 100vw !important;
+        height: 100vw !important;
+    }
+
+    #elements {
+        flex-wrap: wrap;
+        gap: .25rem;
+        justify-content: space-between;
+        margin: 0 .3rem 0rem .3rem;
+    }
+    
+    footer {
+        left: auto;
+        right: 0 !important;
+        margin: 0 1rem 1rem 0;
+    }
+
+    footer > a {
+        font-size: 3rem;
+    }
+
+    .unscrollable {
+        overflow: hidden;
+    }
+
+    summary {
+        text-align: center;
+    }
+
+    details {
+        text-align: left;
+        margin-left: .5rem;
+    }
 }

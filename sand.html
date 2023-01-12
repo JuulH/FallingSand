@@ -6,29 +6,42 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Falling Sand</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+
     <link rel='stylesheet' type='text/css' media='screen' href='sand.css'>
-    <script src="https://kit.fontawesome.com/20bb223478.js" crossorigin="anonymous"></script>
     <script src='elements.js' defer></script>
     <script src='simulation.js' defer></script>
     <script src='sand.js' defer></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/20bb223478.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div>
+    <main>
         <h1>Falling Sand</h1>
-        <canvas id="canvas" width="512" height="512"></canvas>
-        <div id="elements">
-            <button onclick="ClearCanvas()"><i class="fas fa-xmark"></i></button>
-            <button onclick="TogglePause()" id="pause-button"><i class="fas fa-pause"></i></button>
-        </div><br>
+        <p id="subtitle">A JavaScript-based falling sand simulation</p>
+
+        <div id="sim-container">
+            <canvas id="canvas" width="512" height="512"></canvas>
+            <div id="elements">
+                <button onclick="ClearCanvas()"><i class="fas fa-xmark"></i></button>
+                <button onclick="TogglePause()" id="pause-button"><i class="fas fa-pause"></i></button>
+                <button onclick="ToggleFullScreen()" id="fullscreen-button"><i class="fas fa-expand"></i></button>
+            </div>
+        </div>
+
+        <br>
         <details id="data">
             <summary>Simulation Data</summary>
             <p id="data-text"></p>
         </details>
-    </div>
+    </main>
+
+    <footer>
+        <a href="https://github.com/JuulH/FallingSand"><i class="fab fa-github"></i></a>
+    </footer>
 </body>
 
 </html>

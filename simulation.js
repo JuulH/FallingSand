@@ -32,7 +32,7 @@ function AddElement(x, y, element) {
     }
 }
 
-
+// Check if any coordinate is a valid and empty spot
 function CanMoveTo(x, y) {
     if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) {
         return false;
@@ -47,6 +47,7 @@ function CanMoveTo(x, y) {
     return true;
 }
 
+// Advance simulation by one step
 function Simulate() {
     for(const [id, particle] of particles.entries()) {
         for (moveablePosition of particle.moveablePositions) {

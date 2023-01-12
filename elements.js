@@ -1,3 +1,5 @@
+// Contains the classes for the different elements in the simulation
+
 class Particle {
     constructor(x, y) {
         this.x = x;

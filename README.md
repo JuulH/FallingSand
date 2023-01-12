@@ -1,2 +1,2 @@
 # FallingSand
- Simple Javascript based falling sand simulation
+ Simple JavaScript & HTML canvas based falling sand simulation

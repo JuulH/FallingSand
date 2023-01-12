@@ -74,12 +74,17 @@ canvas.addEventListener('mouseup', (event) => {
 });
 
 canvas.addEventListener('mousemove', (event) => {
-    mouse.px = mouse.x;
-    mouse.py = mouse.y;
+    let px = mouse.x;
+    let py = mouse.y;
 
     // Get mouse position regardless of canvas size
     mouse.x = Math.floor(event.offsetX / ratioX);
     mouse.y = Math.floor(event.offsetY / ratioY);
+
+    if ((px != mouse.x || py != mouse.y)) {
+        mouse.px = px;
+        mouse.py = py;
+    }
 });
 
 const rect = canvas.getBoundingClientRect();
@@ -93,6 +98,9 @@ canvas.addEventListener('touchstart', (event) => {
     mouse.x = Math.floor((event.touches[0].pageX - rect.left) / ratioX);
     mouse.y = Math.floor((event.touches[0].pageY - rect.top) / ratioY);
 
+    // mouse.px = mouse.x;
+    // mouse.py = mouse.y;
+
     touchDown = true;
 });
 
@@ -103,12 +111,17 @@ canvas.addEventListener('touchend', (event) => {
 });
 
 window.addEventListener('touchmove', (event) => {
-    mouse.px = mouse.x;
-    mouse.py = mouse.y;
+    let px = mouse.x;
+    let py = mouse.y;
 
     // Alternative to event.offsetX/Y which doesn't work on touchscreen
     mouse.x = Math.floor((event.touches[0].pageX - rect.left) / ratioX);
     mouse.y = Math.floor((event.touches[0].pageY - rect.top) / ratioY);
+
+    if(px != mouse.x || py != mouse.y) {
+        mouse.px = px;
+        mouse.py = py;
+    }
 });
 
 // #endregion
@@ -341,6 +354,23 @@ function Brush(cx, cy, size, cElement) {
     }
 }
 
+function LineTo(x1, y1, x2, y2, brushSize, cElement) {
+    let dx = Math.abs(x2 - x1);
+    let dy = Math.abs(y2 - y1);
+    let sx = (x1 < x2) ? 1 : -1;
+    let sy = (y1 < y2) ? 1 : -1;
+    let err = dx - dy;
+
+    while (true) {
+        Brush(x1, y1, brushSize, cElement);
+
+        if ((x1 == x2) && (y1 == y2)) break;
+        let e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; x1 += sx; }
+        if (e2 < dx) { err += dx; y1 += sy; }
+    }
+}
+
 SelectElement(0);
 
 let timeSinceUpdate = 0;
@@ -384,7 +414,8 @@ function animate() {
 
     // Add selected element at mouse position
     if ((mouseDown || touchDown) && (mouse.x && mouse.y)) {
-        Brush(mouse.x, mouse.y, brushSize, activeElement);
+        //Brush(mouse.x, mouse.y, brushSize, activeElement);
+        LineTo(mouse.px, mouse.py, mouse.x, mouse.y, brushSize, activeElement);
     }
     
     // Draw particles to buffer

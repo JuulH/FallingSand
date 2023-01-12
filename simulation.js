@@ -4,7 +4,10 @@ const Elements = {
     Sand: 0,
     Water: 1,
     Wall: 2,
-    Eraser: 3
+    Eraser: 3,
+    Fire: 4,
+    AntiSand: 5,
+    AntiWater: 6,
 };
 
 function AddElement(x, y, element) {
@@ -21,6 +24,15 @@ function AddElement(x, y, element) {
             break;
         case Elements.Wall:
             particles.push(new Wall(x, y));
+            break;
+        case Elements.AntiSand:
+            particles.push(new AntiSand(x, y));
+            break;
+        case Elements.AntiWater:
+            particles.push(new AntiWater(x, y));
+            break;
+        case Elements.Fire:
+            particles.push(new Fire(x, y));
             break;
         case Elements.Eraser:
             for (const [index, particle] of particles.entries()) {

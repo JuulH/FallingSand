@@ -45,16 +45,38 @@ h1 {
     align-items: center;
     justify-content: center;
     background-color: #171d29;
-
 }
 
 /* Element selection */
+#sim-controls {
+    display: flex;
+    margin-top: .5rem;
+    width: 512px;
+    justify-content: space-between;
+}
+
 #elements {
+    width: 330px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: .5rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
+#controls {
+    width: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
+#controls > button {
+    box-sizing: border-box;
 }
 
 .selected {
@@ -62,7 +84,8 @@ h1 {
     background-color: rgb(250, 104, 7) !important;
 }
 
-#elements > button {
+#elements > button,
+#controls > button {
     padding: .5rem .75rem;
     user-select: none;
     font-family: 'Rubik', sans-serif;
@@ -71,11 +94,13 @@ h1 {
     color: black;
 }
 
-#elements > button:hover {
+#elements > button:hover,
+#controls > button:hover {
     background-color: rgb(184, 184, 184);
 }
 
-#elements > button:focus {
+#elements > button:focus,
+#controls > button:focus {
     background-color: rgb(151, 151, 151);
 }
 
@@ -133,11 +158,26 @@ footer > a:visited {
         height: 100vw !important;
     }
 
+    #sim-controls {
+        width: 100vw;
+        justify-content: space-around;
+    }
+
     #elements {
+        width: 62vw;
         flex-wrap: wrap;
-        gap: .25rem;
-        justify-content: space-between;
-        margin: 0 .3rem 0rem .3rem;
+        gap: .3rem;
+        margin: 0 .1rem 0 0rem;
+    }
+
+    #elements > button {
+        margin-bottom: .1rem;
+    }
+
+    #controls {
+        width: 29vw;
+        gap: .3rem;
+        margin: 0 .3rem 0 0rem;
     }
     
     footer {

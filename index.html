@@ -25,11 +25,19 @@
 
         <div id="sim-container">
             <canvas id="canvas" width="512" height="512"></canvas>
-            <div id="elements">
-                <button onclick="ClearCanvas()" aria-label="Clear canvas"><i class="fas fa-xmark"></i></button>
-                <button onclick="TogglePause()" id="pause-button" aria-label="Pause simulation"><i class="fas fa-pause"></i></button>
-                <button onclick="ToggleFullScreen()" id="fullscreen-button" aria-label="Fullscreen"><i class="fas fa-expand"></i></button>
+            
+            <div id="sim-controls">
+                
+                <div id="elements"></div>
+                
+                <div id="controls">
+                    <button onclick="ClearCanvas()" aria-label="Clear canvas"><i class="fas fa-xmark"></i></button>
+                    <button onclick="TogglePause()" id="pause-button" aria-label="Pause simulation"><i class="fas fa-pause"></i></button>
+                    <button onclick="ToggleFullScreen()" id="fullscreen-button" aria-label="Fullscreen"><i class="fas fa-expand"></i></button>
+                    <button onclick="CanvasToImage()" id="image-button" aria-label="Download image"><i class="fas fa-image"></i></button>
+                </div>
             </div>
+
         </div>
 
         <br>

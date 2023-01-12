@@ -87,8 +87,9 @@ const rect = canvas.getBoundingClientRect();
 canvas.addEventListener('touchstart', (event) => {
     document.body.classList.add('unscrollable');
 
-    mouse.x = Math.floor(event.touches[0].clientX / ratioX);
-    mouse.y = Math.floor(event.touches[0].clientY / ratioY);
+    // Alternative to event.offsetX/Y which doesn't work on touchscreen
+    mouse.x = Math.floor((event.touches[0].pageX - rect.left) / ratioX);
+    mouse.y = Math.floor((event.touches[0].pageY - rect.top) / ratioY);
 
     touchDown = true;
 });
@@ -110,12 +111,12 @@ window.addEventListener('touchmove', (event) => {
 
 // #endregion
 
+// Create buttons to select each element
 let presetBtns = elementButtons.childElementCount;
 
-// Create buttons to select each element
 Object.keys(Elements).forEach((element, index) => {
     let btn = document.createElement('BUTTON');
-    btn.innerText = element;
+    btn.innerText = element.replace(/([A-Z])/g, ' $1').trim();
     elementButtons.insertBefore(btn, elementButtons.children[elementButtons.childElementCount - presetBtns]); // Append before Clear button
 
     // Add event listener to button to select element
@@ -143,6 +144,21 @@ function SelectElement(element) {
 document.addEventListener('keydown', (event) => {
     if (event.key >= 0 && event.key <= 9) {
         SelectElement(event.key - 1);
+    }
+
+    // Spacebar to pause
+    if (event.key == ' ') {
+        TogglePause();
+    }
+
+    // F to toggle fullscreen
+    if (event.key == 'f') {
+        ToggleFullScreen();
+    }
+
+    // C to clear
+    if (event.key == 'c') {
+        ClearCanvas();
     }
 });
 
@@ -184,6 +200,40 @@ function ToggleFullScreen() {
 // Delete all particles
 function ClearCanvas() {
     particles = [];
+}
+
+// Screen capture of canvas
+function CanvasToImage() {
+    // Draw background
+    for (x = 0; x < canvas.width; x++) {
+        for (y = 0; y < canvas.height; y++) {
+            draw(x, y, 0, 0, 0);
+        }
+    }
+
+    // Draw particles
+    for (particle of particles) {
+        draw(particle.x, particle.y, ...particle.color)
+    }
+
+    ctx.putImageData(buffer, 0, 0); // Draw buffer to canvas
+
+    // Create resized canvas as original canvas is too small
+    let resizedCanvas = document.createElement('canvas');
+    let resizedContext = resizedCanvas.getContext('2d');
+
+    resizedCanvas.width = canvas.width * 8;
+    resizedCanvas.height = canvas.height * 8;
+
+    resizedContext.imageSmoothingEnabled = false;
+    resizedContext.drawImage(canvas, 0, 0, resizedCanvas.width, resizedCanvas.height);
+
+    // Download image
+    let img = resizedCanvas.toDataURL('image/png');
+    let link = document.createElement('a');
+    link.download = 'FallingSand.png';
+    link.href = img;
+    link.click();
 }
 
 SelectElement(0);
@@ -241,7 +291,7 @@ function animate() {
     }
 
     // Display debug data
-    debugData.innerText = `FPS: ${Math.round(averageFps)}/${fps}\n Particles: ${particles.length}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Previous Mouse Position: ${mouse.px}, ${mouse.py}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}\n Active Element: ${activeElement}, ${Object.keys(Elements)[activeElement]}`;
+    debugData.innerText = `FPS: ${Math.round(averageFps)}/${fps}\n Particles: ${particles.length}\n Active Element: ${activeElement}, ${Object.keys(Elements)[activeElement]}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Previous Mouse Position: ${mouse.px}, ${mouse.py}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}`;
 
     ctx.putImageData(buffer, 0, 0); // Draw buffer to canvas
 

@@ -112,7 +112,7 @@ footer > a:hover {
     opacity: .75;
 }
 
-footer > a:focus {
+footer > a:visited {
     color: white;
 }
 

@@ -92,14 +92,14 @@ const rect = canvas.getBoundingClientRect();
 // Touchscreen input
 // Make sure user can't accidentally scroll while using canvas
 canvas.addEventListener('touchstart', (event) => {
-    document.body.classList.add('unscrollable');
+    document.body.classList.add('unscrollable'); // Make sure users can't scroll while using canvas
 
     // Alternative to event.offsetX/Y which doesn't work on touchscreen
     mouse.x = Math.floor((event.touches[0].pageX - rect.left) / ratioX);
     mouse.y = Math.floor((event.touches[0].pageY - rect.top) / ratioY);
 
-    // mouse.px = mouse.x;
-    // mouse.py = mouse.y;
+    mouse.px = mouse.x;
+    mouse.py = mouse.y;
 
     touchDown = true;
 });

@@ -59,6 +59,7 @@ function CanMoveTo(x, y) {
     return true;
 }
 
+// Enable or disable sand sinking below water
 let sandSink = true;
 
 // Advance simulation by one step
@@ -77,20 +78,24 @@ function Simulate() {
                 particle.x += moveablePosition[0];
                 particle.y += moveablePosition[1];
                 break;
-            } else if (sandSink && particle.id == Elements.Sand || particle.id == Elements.AntiSand) {
-                let w_particle = particles.find(w_particle => w_particle.x == particle.x + moveablePosition[0] && w_particle.y == particle.y + moveablePosition[1] && w_particle.id == Elements.Water);
+
+            } else if (sandSink && (particle.id == Elements.Sand || particle.id == Elements.AntiSand)) {
+                
+                // Check if water particle at desired position
+                let w_particle = particles.find(w_particle => w_particle.x == particle.x + moveablePosition[0] && w_particle.y == particle.y + moveablePosition[1] && (w_particle.id == Elements.Water || w_particle.id == Elements.AntiWater));
                 if(!w_particle) {
                     continue;
                 }
 
-                console.log('Sand and water found');
+                // Switch places with water
                 w_particle.x = particle.x;
                 w_particle.y = particle.y;
 
                 particle.x += moveablePosition[0];
                 particle.y += moveablePosition[1];
 
-                for(i = 0; i < 4; i++) {
+                // Avoid water travelling upstream
+                for(i = 0; i < 3; i++) {
                     for (w_moveablePosition of w_particle.moveablePositions) {
                         if (CanMoveTo(w_particle.x + w_moveablePosition[0], w_particle.y + w_moveablePosition[1])) {
                             w_particle.x += w_moveablePosition[0];

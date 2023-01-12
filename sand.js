@@ -157,13 +157,15 @@ function SelectElement(element) {
 
 let maxBrushSize = 16;
 
+// Update brush size using slider
 brushSlider.oninput = function() {
     brushSize = Math.round(this.value);
     brushLabel.innerText = brushSize;
 }
 
-// Event handler for keyboard input to select elements using numbers
+// Keyboard input
 document.addEventListener('keydown', (event) => {
+    // 1-9 to select elements
     if (event.key >= 0 && event.key <= 9) {
         SelectElement(event.key - 1);
     }
@@ -267,7 +269,7 @@ function CanvasToImage() {
     // Download image
     let img = resizedCanvas.toDataURL('image/png');
     let link = document.createElement('a');
-    link.download = 'FallingSand.png';
+    link.download = `FallingSand - ${new Date().toLocaleDateString()}.png`;
     link.href = img;
     link.click();
 }

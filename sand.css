@@ -217,7 +217,7 @@ footer > a:visited {
     footer {
         left: auto;
         right: 0 !important;
-        margin: 0 1rem 1rem 0;
+        margin: 0 .25rem .25rem 0;
     }
 
     footer > a {

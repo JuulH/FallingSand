@@ -17,22 +17,22 @@ function AddElement(x, y, element) {
 
     switch (element) {
         case Elements.Sand:
-            particles.push(new Sand(x, y));
+            particles.push(new Sand(x, y, Elements.Sand));
             break;
         case Elements.Water:
-            particles.push(new Water(x, y));
+            particles.push(new Water(x, y, Elements.Water));
             break;
         case Elements.Wall:
-            particles.push(new Wall(x, y));
+            particles.push(new Wall(x, y, Elements.Wall));
             break;
         case Elements.AntiSand:
-            particles.push(new AntiSand(x, y));
+            particles.push(new AntiSand(x, y, Elements.AntiSand));
             break;
         case Elements.AntiWater:
-            particles.push(new AntiWater(x, y));
+            particles.push(new AntiWater(x, y, Elements.AntiWater));
             break;
         case Elements.Fire:
-            particles.push(new Fire(x, y));
+            particles.push(new Fire(x, y, Elements.Fire));
             break;
         case Elements.Eraser:
             for (const [index, particle] of particles.entries()) {

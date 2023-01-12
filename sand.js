@@ -236,6 +236,69 @@ function CanvasToImage() {
     link.click();
 }
 
+// Export particles to JSON file
+function ExportParticles() {
+    let exportData = [];
+
+    // Loop through canvas and add particle ID to array
+    for (y = 0; y < canvas.height; y++) {
+        for (x = 0; x < canvas.width; x++) {
+            if (CanMoveTo(x, y)) {
+                exportData.push(-1);
+            } else {
+                exportData.push(particles.find(particle => particle.x == x && particle.y == y).id);
+            }
+        }
+    }
+
+    // Convert array to JSON and download
+    let data = JSON.stringify(exportData);
+    let blob = new Blob([data], { type: 'application/json' });
+    let url = URL.createObjectURL(blob);
+    let link = document.createElement('a');
+    link.download = 'FallingSand.json';
+    link.href = url;
+    link.click();
+}
+
+// Import particles from JSON file
+function LoadParticles() {
+
+    // User file input
+    let file = document.createElement('input');
+    file.type = 'file';
+    file.accept = '.json';
+    file.click();
+
+    // On file uploaded
+    file.addEventListener('change', (event) => {
+
+        if (!paused) {
+            TogglePause();
+        }
+
+        ClearCanvas();
+
+        let reader = new FileReader();
+        reader.readAsText(event.target.files[0]);
+
+        // Parse json file
+        reader.onload = (event) => {
+            let data = JSON.parse(event.target.result);
+
+            for (y = 0; y < canvas.height; y++) {
+                for(x = 0; x < canvas.width; x++) {
+
+                    let index = x + y * canvas.width;
+                    if (data[index] != -1) {
+                        AddElement(x, y, data[index]);
+                    }
+                }
+            }
+        }
+    });
+}
+
 SelectElement(0);
 
 let timeSinceUpdate = 0;

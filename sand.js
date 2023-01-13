@@ -64,6 +64,9 @@ const ratioY = cssHeight / canvas.height;
 
 // Mouse input
 canvas.addEventListener('mousedown', (event) => {
+    mouse.px = mouse.x;
+    mouse.py = mouse.y;
+    
     if (event.button == 0) {
         mouseDown = true;
     }

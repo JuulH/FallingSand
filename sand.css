@@ -1,3 +1,4 @@
+/* General styles */
 html {
     height: 100vh;
 }
@@ -6,8 +7,7 @@ body {
     color: white;
     display: flex;
     justify-content: center;
-    background-color: #171d29;
-    /*#10141c*/
+    background-color: #171d29; /*#10141c*/
     font-family: 'Rubik', sans-serif;
 }
 
@@ -24,7 +24,6 @@ h1 {
     font-size: .95rem;
     margin: .5rem 0 .75rem 0;
 }
-
 
 /* Simulation */
 #canvas{
@@ -48,7 +47,7 @@ h1 {
     background-color: #171d29;
 }
 
-/* Element selection */
+/* Element selection & controls */
 #sim-controls {
     display: flex;
     margin-top: .5rem;
@@ -90,7 +89,6 @@ h1 {
 
 #brush-slider {
     width: 100%;
-
 }
 
 #brush-label {
@@ -136,10 +134,6 @@ h1 {
 }
 
 /* Debug Data */
-/* #data {
-    margin-top: .5rem;
-} */
-
 #data > summary {
     cursor: pointer;
     user-select: none;
@@ -149,7 +143,7 @@ h1 {
     user-select: text;
 }
 
-/* Github link */
+/* GitHub link */
 footer {
     position: fixed;
     bottom: 0;
@@ -175,6 +169,7 @@ footer > a:visited {
 /* Mobile support */
 @media only screen and (max-width: 600px) {
 
+    /* General styles */
     h1 {
         font-size: 1.75rem;
     }
@@ -189,15 +184,7 @@ footer > a:visited {
         height: 100vw !important;
     }
 
-    #sim-controls {
-        width: 100vw;
-        justify-content: space-around;
-    }
-
-    #fullscreen-button {
-        display: none !important;
-    }
-
+    /* Element selection & controls */
     #elements {
         width: 62vw;
         flex-wrap: wrap;
@@ -209,27 +196,39 @@ footer > a:visited {
         margin-bottom: .1rem;
     }
 
+    #sim-controls {
+        width: 100vw;
+        justify-content: space-around;
+    }
+
+    #fullscreen-button {
+        display: none !important;
+    }
+
     #controls {
         width: 32vw;
         gap: .3rem;
         margin: 0 .3rem 0 0rem;
     }
     
+    /* GitHub link */
     footer {
         left: auto;
         right: 0 !important;
-        margin: 0 .25rem .25rem 0;
+        margin: 0 .5rem .5rem 0;
     }
 
     footer > a {
-        font-size: 3rem;
+        font-size: 2.5rem;
         opacity: 0.25;
     }
 
+    /* Prevent touchscreen scrolling on canvas */
     .unscrollable {
         overflow: hidden;
     }
 
+    /* Debug data */
     summary {
         text-align: center;
     }

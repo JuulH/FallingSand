@@ -75,6 +75,7 @@ function Simulate() {
                     }
                 }
 
+                // Move particle to preferred available position
                 particle.x += moveablePosition[0];
                 particle.y += moveablePosition[1];
                 break;

@@ -27,7 +27,7 @@
             <canvas id="canvas" width="512" height="512"></canvas>
             
             <div id="sim-controls">
-                
+                <!-- Elements are generated at runtime -->
                 <div id="elements"></div>
                 
                 <div id="controls">
@@ -37,10 +37,12 @@
                     <button onclick="CanvasToImage()" id="image-button" title="Download image" aria-label="Download image"><i class="fas fa-image"></i></button>
                     <button onclick="ExportParticles()" id="save-button" title="Export particles" aria-label="Export particles"><i class="fas fa-download"></i></button>
                     <button onclick="LoadParticles()" id="load-button" title="Load particles" aria-label="Load particles"><i class="fas fa-upload"></i></button>
+                    
                     <div id="brush-container">
                         <label for="brush-slider" id="brush-label">Brush size: <span id="brush-size">0</span></label>
                         <input type="range" id="brush-slider" step="1" min="0" max="16" value="0" title="Brush size" aria-label="Brush size">
                     </div>
+
                 </div>
 
             </div>
@@ -48,12 +50,13 @@
         </div>
 
         <br>
-        <details id="data" aria-label="Debug dropdown">
+        <details id="data" aria-label="Debug information dropdown">
             <summary>Simulation Data</summary>
             <p id="data-text"></p>
         </details>
     </main>
 
+    <!-- Source code -->
     <footer>
         <a href="https://github.com/JuulH/FallingSand"><i class="fab fa-github"></i></a>
     </footer>

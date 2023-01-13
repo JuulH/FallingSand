@@ -87,12 +87,13 @@ canvas.addEventListener('mousemove', (event) => {
     }
 });
 
-const rect = canvas.getBoundingClientRect();
 
 // Touchscreen input
 // Make sure user can't accidentally scroll while using canvas
+const rect = canvas.getBoundingClientRect();
+
 canvas.addEventListener('touchstart', (event) => {
-    document.body.classList.add('unscrollable'); // Make sure users can't scroll while using canvas
+    document.body.classList.add('unscrollable'); // Make sure user can't scroll while using canvas
 
     // Alternative to event.offsetX/Y which doesn't work on touchscreen
     mouse.x = Math.floor((event.touches[0].pageX - rect.left) / ratioX);
@@ -123,7 +124,6 @@ window.addEventListener('touchmove', (event) => {
         mouse.py = py;
     }
 });
-
 // #endregion
 
 // Create buttons to select each element
@@ -155,9 +155,10 @@ function SelectElement(element) {
     elementButtons.children[activeElement].classList.add('selected');
 }
 
-let maxBrushSize = 16;
 
 // Update brush size using slider
+let maxBrushSize = 16;
+
 brushSlider.oninput = function() {
     brushSize = Math.round(this.value);
     brushLabel.innerText = brushSize;
@@ -323,7 +324,7 @@ function LoadParticles() {
         let reader = new FileReader();
         reader.readAsText(event.target.files[0]);
 
-        // Parse json file
+        // Parse json file & place elements
         reader.onload = (event) => {
             let data = JSON.parse(event.target.result);
 
@@ -346,7 +347,7 @@ function Brush(cx, cy, size, cElement) {
     for (y = cy - size; y < cy + size + 1; y++) {
         for (x = cx - size; x < cx + size + 1; x++) {
 
-            // Brush rounding
+            // Brush rounding using distance from cursor
             let distance = Math.sqrt(Math.pow(x - cx, 2) + Math.pow(y - cy, 2));
             if (distance <= size) {
                 AddElement(x, y, cElement);
@@ -356,6 +357,8 @@ function Brush(cx, cy, size, cElement) {
     }
 }
 
+// Draw line between two points (used for interpolation)
+// Bresenham's line algorithm
 function LineTo(x1, y1, x2, y2, brushSize, cElement) {
     let dx = Math.abs(x2 - x1);
     let dy = Math.abs(y2 - y1);
@@ -380,8 +383,9 @@ let frameCount = 0;
 let totalFps = 0;
 let currentFps = 0;
 let averageFps = 0;
+let brushSize = 0;
 
-// Update average fps every second
+// Measure average fps every second
 // TODO: Fix this :(
 setInterval(() => {
     // Calculate average fps using totaltime and updates
@@ -389,8 +393,6 @@ setInterval(() => {
     totalFps = 0;
     frameCount = 0;
 }, 500);
-
-let brushSize = 0;
 
 // Update loop
 function animate() {

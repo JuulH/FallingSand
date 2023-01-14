@@ -59,8 +59,9 @@ function CanMoveTo(x, y) {
     return true;
 }
 
-// Enable or disable sand sinking below water
-let sandSink = true;
+
+let sandSink = true; // Enable or disable sand sinking below water
+let evaporate = true; // Enable or disable fire evaporating water
 
 // Advance simulation by one step
 function Simulate() {
@@ -80,7 +81,11 @@ function Simulate() {
                 particle.y += moveablePosition[1];
                 break;
 
-            } else if (sandSink && (particle.id == Elements.Sand || particle.id == Elements.AntiSand)) {
+            }
+
+            // Additional logic for special elements
+            // Sinking sand under water
+            else if (sandSink && (particle.id == Elements.Sand || particle.id == Elements.AntiSand)) {
                 
                 // Check if water particle at desired position
                 let w_particle = particles.find(w_particle => w_particle.x == particle.x + moveablePosition[0] && w_particle.y == particle.y + moveablePosition[1] && (w_particle.id == Elements.Water || w_particle.id == Elements.AntiWater));
@@ -95,7 +100,7 @@ function Simulate() {
                 particle.x += moveablePosition[0];
                 particle.y += moveablePosition[1];
 
-                // Avoid water travelling upstream
+                // Avoid water travelling upstream in sand
                 for(i = 0; i < 3; i++) {
                     for (w_moveablePosition of w_particle.moveablePositions) {
                         if (CanMoveTo(w_particle.x + w_moveablePosition[0], w_particle.y + w_moveablePosition[1])) {
@@ -104,6 +109,52 @@ function Simulate() {
                             break;
                         }
                     }
+                }
+
+                break;
+            }
+            
+            // Fire evaporating water
+            else if (evaporate && (particle.id == Elements.Water || particle.id == Elements.AntiWater)) {
+                let w_particle = particles.find(w_particle => w_particle.x == particle.x + moveablePosition[0] && w_particle.y == particle.y + moveablePosition[1] && w_particle.id == Elements.Fire);
+                if(!w_particle) {
+                    continue;
+                }
+
+                // Remove water particle
+                particles.splice(id, 1);
+
+                
+                // Limit fire evaporation uses
+                w_particle.uses--;
+                
+                if (w_particle.uses < 1) {
+                    particles.splice(particles.indexOf(w_particle), 1);
+                    break;
+                }
+
+                break;
+
+            } else if (evaporate && (particle.id == Elements.Fire)) {
+
+                let w_particle = particles.find(w_particle => w_particle.x == particle.x + moveablePosition[0] && w_particle.y == particle.y + moveablePosition[1] && (w_particle.id == Elements.Water || w_particle.id == Elements.AntiWater));
+                if(!w_particle) {
+                    continue;
+                }
+
+                // Remove water particle
+                particles.splice(particles.indexOf(w_particle), 1);
+
+                // Move fire particle
+                particle.x += moveablePosition[0];
+                particle.y += moveablePosition[1];
+
+                // Limit fire evaporation uses
+                particle.uses--;
+
+                if(particle.uses < 1) {
+                    particles.splice(particles.indexOf(particle), 1);
+                    break;
                 }
 
                 break;

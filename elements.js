@@ -70,6 +70,7 @@ class AntiWater extends Particle {
 class Fire extends Particle {
     constructor(x, y, _id) {
         super(x, y, _id);
+        this.uses = 1; // Number of times element can evaporate water
         this.color = [255, 0, 0];
         this.moveablePositions = [
             [0, 1],

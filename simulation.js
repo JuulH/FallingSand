@@ -59,7 +59,6 @@ function CanMoveTo(x, y) {
     return true;
 }
 
-
 let sandSink = true; // Enable or disable sand sinking below water
 let evaporate = true; // Enable or disable fire evaporating water
 
@@ -116,6 +115,8 @@ function Simulate() {
             
             // Fire evaporating water
             else if (evaporate && (particle.id == Elements.Water || particle.id == Elements.AntiWater)) {
+                // Water touches fire
+                
                 let w_particle = particles.find(w_particle => w_particle.x == particle.x + moveablePosition[0] && w_particle.y == particle.y + moveablePosition[1] && w_particle.id == Elements.Fire);
                 if(!w_particle) {
                     continue;
@@ -136,6 +137,7 @@ function Simulate() {
                 break;
 
             } else if (evaporate && (particle.id == Elements.Fire)) {
+                // Fire touches water
 
                 let w_particle = particles.find(w_particle => w_particle.x == particle.x + moveablePosition[0] && w_particle.y == particle.y + moveablePosition[1] && (w_particle.id == Elements.Water || w_particle.id == Elements.AntiWater));
                 if(!w_particle) {

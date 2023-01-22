@@ -18,12 +18,10 @@ ctx.imageSmoothingEnabled = false;
 const buffer = ctx.getImageData(0, 0, canvas.width, canvas.height);
 //#endregion
 
-let fps = 120; // Fps limit
-
 // Draw pixel to buffer
 // Buffer is in format [r,g,b,a,r,g,b,a....]
 function draw(x, y, r, g, b) {
-    let i = x * 4 + y * 4 * canvas.width;  // Coordinate
+    let i = x * 4 + y * 4 * canvas.width;  // Index
     buffer.data[i] = r;                    // Red
     buffer.data[i + 1] = g;                // Green
     buffer.data[i + 2] = b;                // Blue
@@ -77,19 +75,13 @@ canvas.addEventListener('mouseup', (event) => {
 });
 
 canvas.addEventListener('mousemove', (event) => {
-    let px = mouse.x;
-    let py = mouse.y;
+    mouse.px = mouse.x;
+    mouse.py = mouse.y;
 
     // Get mouse position regardless of canvas size
     mouse.x = Math.floor(event.offsetX / ratioX);
     mouse.y = Math.floor(event.offsetY / ratioY);
-
-    if ((px != mouse.x || py != mouse.y)) {
-        mouse.px = px;
-        mouse.py = py;
-    }
 });
-
 
 // Touchscreen input
 // Make sure user can't accidentally scroll while using canvas
@@ -135,7 +127,7 @@ let presetBtns = elementButtons.childElementCount;
 Object.keys(Elements).forEach((element, index) => {
     let btn = document.createElement('BUTTON');
     btn.innerText = element.replace(/([A-Z])/g, ' $1').trim();
-    elementButtons.insertBefore(btn, elementButtons.children[elementButtons.childElementCount - presetBtns]); // Append before Clear button
+    elementButtons.insertBefore(btn, elementButtons.children[elementButtons.childElementCount - presetBtns]); // Append before preset buttons
 
     // Add event listener to button to select element
     btn.addEventListener('click', (event) => {
@@ -365,17 +357,23 @@ function Brush(cx, cy, size, cElement) {
 function LineTo(x1, y1, x2, y2, brushSize, cElement) {
     let dx = Math.abs(x2 - x1);
     let dy = Math.abs(y2 - y1);
-    let sx = (x1 < x2) ? 1 : -1;
-    let sy = (y1 < y2) ? 1 : -1;
-    let err = dx - dy;
+    let stepX = (x1 < x2) ? 1 : -1;
+    let stepY = (y1 < y2) ? 1 : -1;
+    let error = dx - dy;
 
     while (true) {
         Brush(x1, y1, brushSize, cElement);
 
         if ((x1 == x2) && (y1 == y2)) break;
-        let e2 = 2 * err;
-        if (e2 > -dy) { err -= dy; x1 += sx; }
-        if (e2 < dx) { err += dx; y1 += sy; }
+
+        let error2 = 2 * error;
+        if (error2 > -dy) {
+            error -= dy;
+            x1 += stepX;
+        } else if (error2 < dx) {
+            error += dx;
+            y1 += stepY;
+        }
     }
 }
 
@@ -388,8 +386,7 @@ let currentFps = 0;
 let averageFps = 0;
 let brushSize = 0;
 
-// Measure average fps every second
-// TODO: Fix this :(
+// Measure average fps every half second
 setInterval(() => {
     // Calculate average fps using totaltime and updates
     averageFps = Math.round(totalFps / frameCount);
@@ -399,16 +396,11 @@ setInterval(() => {
 
 // Update loop
 function animate() {
-
-    // Limit framerate
-    setTimeout(() => {
-        requestAnimationFrame(animate);
-    }, 1000 / fps);
-
     timeSinceUpdate = performance.now() - start;
     currentFps = 1 / (timeSinceUpdate / 1000);
     totalFps += currentFps;
     frameCount++;
+    start = performance.now();
 
     // Clear frame
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -419,12 +411,6 @@ function animate() {
         Simulate();
     }
 
-    // Add selected element at mouse position
-    if ((mouseDown || touchDown) && (mouse.x && mouse.y)) {
-        //Brush(mouse.x, mouse.y, brushSize, activeElement);
-        LineTo(mouse.px, mouse.py, mouse.x, mouse.y, brushSize, activeElement);
-    }
-    
     // Draw particles to buffer
     for (particle of particles) {
         draw(particle.x, particle.y, ...particle.color)
@@ -436,12 +422,24 @@ function animate() {
     }
 
     // Display debug data
-    debugData.innerText = `FPS: ${Math.round(averageFps)}/${fps}\n Particles: ${particles.length}\n Active Element: ${activeElement}, ${Object.keys(Elements)[activeElement]}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Previous Mouse Position: ${mouse.px}, ${mouse.py}\n Brush Size: ${brushSize}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}`;
+    debugData.innerText = `FPS: ${Math.round(averageFps)}\n Particles: ${particles.length}\n Active Element: ${activeElement}, ${Object.keys(Elements)[activeElement]}\n Mouse Position: ${mouse.x}, ${mouse.y}\n Previous Mouse Position: ${mouse.px}, ${mouse.py}\n Brush Size: ${brushSize}\n Can Move: ${CanMoveTo(mouse.x, mouse.y)}`;
 
     ctx.putImageData(buffer, 0, 0); // Draw buffer to canvas
 
-    start = performance.now();
+    requestAnimationFrame(animate);
+}
+
+// Get brush input in a separate loop to make brush lines smoother
+function DrawElements() {
+    // Add selected element at mouse position
+    if ((mouseDown || touchDown) && (mouse.x && mouse.y)) {
+        //Brush(mouse.x, mouse.y, brushSize, activeElement);
+        LineTo(mouse.px, mouse.py, mouse.x, mouse.y, brushSize, activeElement);
+    }
+
+    requestAnimationFrame(DrawElements);
 }
 
 let start = performance.now();
 animate();
+DrawElements();
